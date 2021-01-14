@@ -11,5 +11,4 @@
         </li>
         <li class="list-group-item">
             <a href="{{ route('companies.partners.edit', $company->id)  }}">Program partnerski</a></li>
-        <li class="list-group-item">Vestibulum at eros</li>
 @endif
