@@ -35,8 +35,8 @@ class CourseController extends Controller
 
     public function full() {
         return view('courses.list', [
-            'courses'=>Course::first()->where('company_id','=',CompanyUser::getCompanyId())->get(),
-            'company'=>Company::findOrFail(CompanyUser::getCompanyId())
+            'courses'=>Course::first()->where('company_id','=',CompanyUser::getCompanyId(Auth::id()))->get(),
+            'company'=>Company::findOrFail(CompanyUser::getCompanyId(Auth::id()))
         ]);
     }
 
@@ -48,7 +48,7 @@ class CourseController extends Controller
 
         $data = $this->validator($request->all())->validate();
         $data['user_id'] = Auth::id();
-        $data['company_id'] = CompanyUser::getCompanyId();
+        $data['company_id'] = CompanyUser::getCompanyId(Auth::id());
 
         $course = Course::create($data);
         $course->save();
@@ -65,7 +65,7 @@ class CourseController extends Controller
 //        }
 
         $course = Course::findOrFail($id);
-        $course['company_id'] = CompanyUser::lastCompany();
+        $course['company_id'] = CompanyUser::getLastCompanyId(Auth::id());
 
         $data = $this->validator($request->all())->validate();
 
@@ -78,7 +78,7 @@ class CourseController extends Controller
 
         return view('courses.edit', [
             'course'=>$course,
-            'company'=>Company::findOrFail(CompanyUser::getCompanyId())
+            'company'=>Company::findOrFail(CompanyUser::getCompanyId(Auth::id()))
         ]);
     }
 

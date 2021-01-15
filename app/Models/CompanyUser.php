@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\NoCompanyUserException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -20,23 +21,36 @@ class CompanyUser extends Model
 
     protected $table = 'company_user';
 
-    public static function getCompanyId()
+    public static function getCompanyId(int $userId)
     {
-        //DB::enableQueryLog();
-        $company_id = CompanyUser::first()->where('user_id', '=', Auth::id())->value('company_id');
+        if( is_null($userId) || $userId < 0 )
+            return 0;
+
+        $company_id = CompanyUser::first()->where('user_id', '=', $userId)->value('company_id');
+
+        if( is_null($company_id))
+            throw new NoCompanyUserException();
+
         return $company_id;
-        //dd($company_id);
-        //dd(DB::getQueryLog());
     }
 
     public function company() {
         return $this->belongsToMany(Company::class);
     }
 
-    public static function getLastCompanyId()
+    public static function getLastCompanyId(int $userId): int
     {
-        return User::first()->where('id', '=', Auth::id())->value('last_company');
+        if( is_null($userId) || $userId < 0 )
+            return 0;
+
+        $lastCompanyId = (integer)User::first()->where('id', '=', $userId)->value('last_company');
+
+        if( $lastCompanyId === 0)
+            return 0;
+
+        return $lastCompanyId;
     }
+
 
     public static function getRole() {
         return self::role;

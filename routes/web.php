@@ -82,9 +82,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('orders/noterm', [OrderController::class, 'noterm']);
     Route::get('orders/check', [OrderController::class, 'days']);
     Route::get('orders/log', [OrderController::class, 'log']);
+    Route::get('orders/thanks', [OrderController::class, 'thanks'])->name('orders.thanks');
     Route::get('orders/{id}', [OrderController::class, 'edit'])->name('orders.edit');
 
-
+    Route::post('orders/create', [OrderController::class, 'store'])->name('orders.create');
     Route::put('orders/{id}', [OrderController::class, 'update']);
 
 
@@ -111,4 +112,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::get('orders/form/{id}/{code?}/{site?}', [OrderController::class, 'form'])->name('orders.form');
-Route::post('orders/create', [OrderController::class, 'store'])->name('orders.create');
+
+
+Route::post('orders/create_client', [OrderController::class, 'store_notlogetuser'])->name('orders.create_client');

@@ -104,6 +104,30 @@ class OrderController extends Controller
         return redirect(route('orders.full'));
     }
 
+    public function store_notlogetuser(Request $request) {
+
+        $data = $request->all();
+        $data['status'] = 'Active';
+        $data['installment'] = 'No';
+
+        $course = Course::findOrFail($data['course_id']);
+        $data['due'] = $course->price;
+        $data['company_id'] = $course->company_id;
+
+        $term = Term::findOrFail($data['term_id']);
+
+        $data['from'] = $term->from;
+        $data['to'] = $term->to;
+
+        $order = Order::create($data);
+
+        $order->save();
+
+        session()->flash('Zamówienie dodane');
+
+        return redirect(route('orders.thanks'));
+    }
+
     public function update(Request $request, $id) {
 
         $order = Order::findOrFail($id);
@@ -127,5 +151,9 @@ class OrderController extends Controller
             'partner_code'=>$code,
             'site'=>$site
         ]);
+    }
+
+    public function thanks() {
+        return view('orders.thanks');
     }
 }

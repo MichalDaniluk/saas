@@ -8,6 +8,7 @@ use App\Models\Course;
 use App\Models\Place;
 use App\Models\Term;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TermController extends Controller
@@ -57,7 +58,7 @@ class TermController extends Controller
     public function store(Request $request) {
 
         $data = $this->validator($request->all())->validate();
-        $data['company_id'] = CompanyUser::getCompanyId();
+        $data['company_id'] = CompanyUser::getCompanyId(Auth::id());
         $term = Term::create($data);
 
         $term->save();

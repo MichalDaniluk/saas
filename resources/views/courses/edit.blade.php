@@ -87,7 +87,7 @@
             </div>
         </div>
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-            <span>http://saas.local:8000/getterms/list/{{ $course->id }}/{{ $company->partner_code }}/{{ $company->site }}</span>
+            <span>{{ env('APP_URL') }}/getterms/html/{{ $course->id }}/{{ $company->partner_code }}/{{ $company->site }}</span>
             <table class="table table-stripped">
                         <tr>
                             <th>Rozpoczęcie</th>
