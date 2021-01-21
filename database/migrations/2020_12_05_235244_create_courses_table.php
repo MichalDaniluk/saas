@@ -29,6 +29,8 @@ class CreateCoursesTable extends Migration
             $table->string('image_big')->nullable();
             $table->bigInteger('company_id',false,true);
             $table->bigInteger('user_id',false,true);
+            $table->string('partner_code');
+            $table->string('course_code');
             $table->timestamps();
 
 

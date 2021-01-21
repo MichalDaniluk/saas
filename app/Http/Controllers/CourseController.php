@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderLog;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -36,6 +37,7 @@ class CourseController extends Controller
     public function full() {
         return view('courses.list', [
             'courses'=>Course::first()->where('company_id','=',CompanyUser::getCompanyId(Auth::id()))->get(),
+            'courses_partner'=>Course::first()->where('company_id','=',CompanyUser::getCompanyId(Auth::id()))->get(),
             'company'=>Company::findOrFail(CompanyUser::getCompanyId(Auth::id()))
         ]);
     }
@@ -44,11 +46,39 @@ class CourseController extends Controller
         return view('courses.create');
     }
 
+    public function import_partner() {
+        $jsonString = file_get_contents('https://admin.ckks.pl/index.php?s=api&fun=listaszkoleneksport&ajax');
+
+        $data = json_decode($jsonString, true);
+        //dd($data['lista'][0]);
+        Course::importCourses($data);
+
+        session()->flash('Kursy zaimportowane');
+
+        return redirect(route('courses.list'));
+    }
+
+    public function import_terms_partner() {
+        $jsonString = file_get_contents('https://admin.ckks.pl/index.php?s=api&fun=listaterminoweksport&ajax');
+
+        $data = json_decode($jsonString, true);
+        //dd($data['lista'][0]);
+        Course::importTerms($data);
+
+        session()->flash('Terminy zaimportowane');
+
+        return redirect(route('courses.list'));
+    }
+
     public function store(Request $request, Course $course) {
 
         $data = $this->validator($request->all())->validate();
         $data['user_id'] = Auth::id();
         $data['company_id'] = CompanyUser::getCompanyId(Auth::id());
+
+        if( !isset($data['course_code']) ) {
+            $data = Arr::add($data, 'course_code', uniqid());
+        }
 
         $course = Course::create($data);
         $course->save();

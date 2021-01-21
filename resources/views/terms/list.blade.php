@@ -12,11 +12,13 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
         @foreach($terms as $term)
         <tr>
             <td>{{ $term->from }}</td>
             <td>{{ $term->to }}</td>
+            <td>{{ $term->city }}</td>
             <td><a class="btn btn-primary" href="/terms/{{  $term->id }}/{{ $course_id }}">edycja</a></td>
             <td>
                 <form action="{{ route('terms.delete', $term->id) }}" method="post">

@@ -9,7 +9,16 @@ class Term extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','from','to','course_id','description','place_id','company_id'];
+    protected $fillable = [
+        'title',
+        'from',
+        'to',
+        'course_id',
+        'description',
+        'place_id',
+        'company_id',
+        'city'
+    ];
 
 //    protected $attributes = [
 //        'place_id' => NULL

@@ -56,6 +56,8 @@ Route::group(['middleware' => 'auth'], function () {
 //Courses
     Route::get('courses', [CourseController::class, 'full'])->name('courses.list');
     Route::get('courses/create', [CourseController::class, 'create'])->name('courses.create');
+    Route::get('courses/import_partner', [CourseController::class, 'import_partner'])->name('courses.import_partner');
+    Route::get('courses/import_terms_partner', [CourseController::class, 'import_terms_partner'])->name('courses.import_terms_partner');
 
     Route::delete('courses/{id}', [CourseController::class, 'destroy'])->name('courses.delete');
     Route::post('courses/create', [CourseController::class, 'store'])->name('courses.edit');
@@ -63,8 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 //Terms
     Route::get('terms/list/{id}', [TermController::class, 'full'])->name('terms.list');
-    Route::get('getterms/list/{id}/{code}/{site}', [TermController::class, 'fulljson'])->name('terms.listjson');
-    Route::get('getterms/html/{id}/{code}/{site}', [TermController::class, 'fullhtml'])->name('terms.listjtml');
+
     Route::get('terms/create/{id}', [TermController::class, 'create'])->name('terms.create');
     Route::get('terms/{id}/{course_id}', [TermController::class, 'edit'])->name('terms.edit');
 
@@ -111,7 +112,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
+Route::get('getterms/list/{id}/{code}/{site}', [TermController::class, 'fulljson'])->name('terms.listjson');
+Route::get('getterms/html/{id}/{code}/{site}', [TermController::class, 'fullhtml'])->name('terms.listjtml');
 Route::get('orders/form/{id}/{code?}/{site?}', [OrderController::class, 'form'])->name('orders.form');
-
-
 Route::post('orders/create_client', [OrderController::class, 'store_notlogetuser'])->name('orders.create_client');
